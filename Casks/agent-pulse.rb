@@ -24,10 +24,9 @@ cask "agent-pulse" do
   ]
 
   caveats <<~EOS
-    Agent Pulse is ad-hoc signed (no Apple Developer ID), so macOS may refuse to open
-    a quarantined copy. Install with the quarantine flag left off:
-      brew reinstall --cask --no-quarantine agent-pulse
-    or clear it on the installed app:
+    Agent Pulse is ad-hoc signed (no Apple Developer ID), so Gatekeeper blocks the
+    freshly downloaded copy. Clear the quarantine flag once and it opens normally:
       xattr -dr com.apple.quarantine "#{appdir}/Agent Pulse.app"
+    (or allow it under System Settings → Privacy & Security → Open Anyway)
   EOS
 end
