@@ -24,9 +24,8 @@ cask "agent-pulse" do
   ]
 
   caveats <<~EOS
-    Agent Pulse is ad-hoc signed (no Apple Developer ID), so Gatekeeper blocks the
-    freshly downloaded copy. Clear the quarantine flag once and it opens normally:
-      xattr -dr com.apple.quarantine "#{appdir}/Agent Pulse.app"
-    (or allow it under System Settings → Privacy & Security → Open Anyway)
+    Agent Pulse is ad-hoc signed (no Apple Developer ID). If macOS says
+    "Agent Pulse.app" Not Opened on first launch, click Done, then allow it under
+    System Settings → Privacy & Security → Open Anyway.
   EOS
 end
