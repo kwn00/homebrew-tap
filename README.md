@@ -20,3 +20,7 @@ Open Anyway on first launch).
 
 `bump.yml` checks the latest GitHub release of each app every 6 hours (or on demand from the Actions
 tab) and rewrites `version` / `sha256` in the cask. No tokens beyond the repository's own are needed.
+
+## License
+
+[MIT](LICENSE) © 2026 kwn00
