@@ -1,0 +1,40 @@
+name: Bump casks
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "17 */6 * * *"
+
+permissions:
+  contents: write
+
+jobs:
+  agent-pulse:
+    name: agent-pulse
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Sync cask with the latest release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          CASK=Casks/agent-pulse.rb
+          TAG="$(gh release view --repo kwn00/agent-pulse --json tagName --jq .tagName)"
+          VERSION="${TAG#v}"
+          CURRENT="$(sed -n 's/^  version "\(.*\)"/\1/p' "$CASK")"
+          if [ "$VERSION" = "$CURRENT" ]; then
+            echo "agent-pulse is already at $VERSION"
+            exit 0
+          fi
+          URL="https://github.com/kwn00/agent-pulse/releases/download/${TAG}/AgentPulse-${VERSION}.zip"
+          SHA="$(curl -fsSL "$URL" | shasum -a 256 | cut -d' ' -f1)"
+          sed -i \
+            -e "s/^  version \".*\"/  version \"${VERSION}\"/" \
+            -e "s/^  sha256 \".*\"/  sha256 \"${SHA}\"/" \
+            "$CASK"
+          git config user.name "kwn00"
+          git config user.email "287409090+kwn00@users.noreply.github.com"
+          git commit -am "agent-pulse ${VERSION}"
+          git push
