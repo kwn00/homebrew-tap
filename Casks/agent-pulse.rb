@@ -12,17 +12,9 @@ cask "agent-pulse" do
     strategy :github_latest
   end
 
-  depends_on macos: ">= :sonoma"
+  depends_on macos: :sonoma
 
   app "Agent Pulse.app"
-
-  # The app is ad-hoc signed (no Developer ID), so lift the quarantine flag Homebrew
-  # attaches to downloads; otherwise Gatekeeper refuses to launch it.
-  postflight do
-    system_command "/usr/bin/xattr",
-                   args: ["-dr", "com.apple.quarantine", "#{appdir}/Agent Pulse.app"],
-                   sudo: false
-  end
 
   uninstall quit: "dev.agentpulse.app"
 
@@ -30,4 +22,12 @@ cask "agent-pulse" do
     "~/Library/Application Support/Agent Pulse",
     "~/Library/Preferences/dev.agentpulse.app.plist",
   ]
+
+  caveats <<~EOS
+    Agent Pulse is ad-hoc signed (no Apple Developer ID), so macOS may refuse to open
+    a quarantined copy. Install with the quarantine flag left off:
+      brew reinstall --cask --no-quarantine agent-pulse
+    or clear it on the installed app:
+      xattr -dr com.apple.quarantine "#{appdir}/Agent Pulse.app"
+  EOS
 end

@@ -3,16 +3,18 @@
 Homebrew tap for [kwn00](https://github.com/kwn00)'s tools.
 
 ```sh
-brew install --cask kwn00/tap/agent-pulse
+brew install --cask --no-quarantine kwn00/tap/agent-pulse
 ```
 
 | Cask | What it is |
 |---|---|
 | [`agent-pulse`](Casks/agent-pulse.rb) | [Agent Pulse](https://github.com/kwn00/agent-pulse) — menu bar usage monitor for Antigravity, GitHub Copilot, Codex and Cursor |
 
-The casks here are ad-hoc signed apps (no Apple Developer ID). Each cask clears the quarantine flag
-after install so the app opens without the "unidentified developer" prompt. Prefer to keep the flag?
-Install with `--no-quarantine` omitted *and* remove the `postflight` block in your own tap.
+The apps here are ad-hoc signed (no Apple Developer ID). Homebrew casks can no longer clear the
+quarantine flag themselves (`postflight` shell steps are deprecated in Homebrew 7), so pass
+`--no-quarantine` at install time; otherwise macOS will ask you to allow the app under
+System Settings → Privacy & Security on first launch, or run
+`xattr -dr com.apple.quarantine "/Applications/Agent Pulse.app"`.
 
 ## Updating
 
